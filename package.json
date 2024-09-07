@@ -16,7 +16,7 @@
       "prettier --write ."
     ]
   },
-  "author": "Mahendar <mahendarchikkolla@gmail.com>",
+  "author": "Akash <akashladdu2003@gmail.com>",
   "license": "ISC",
   "dependencies": {
     "bcrypt": "^5.1.0",
