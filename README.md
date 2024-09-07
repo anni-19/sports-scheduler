@@ -3,7 +3,7 @@
 
 This is a Sport Sccheduling website built using Node.js which allows players to sign up and join sport sessions and to schedule new Session.
 
-### [Sports Scheduler](https://vjit-sports-scheduler.onrender.com/)
+### [VJIT Sports Scheduler](https://vjit-sports-scheduler.onrender.com/)
 
 ## Features
 
