@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="./css/style.css" />
+    <title>Reports Insights</title>
+    <script>
+      function deleteSport(id) {
+        fetch(`/sport/${id}`, {
+          method: "delete",
+        })
+          .then((res) => {
+            if (res.ok) {
+              window.location.href = "/";
+            }
+          })
+          .catch((err) => console.error(err));
+      }
+    </script>
+  </head>
+  <body>
+    <%- include('navbar') %>
+    <div class="grid grid-cols-6 pt-10">
+      <div class="col-start-3 col-span-2">
+        <div>
+          <h1 class="my-4 text-2xl font-bold">
+           All Sessions (<%=allSessions.length %>)
+          </h1>
+          <h1 class="text-xl mb-3 font-semibold text-gray-600">
+            Sessions of <%- sportTitle %>
+          </h1>
+          <table>
+            <% for( var i = 0 ; i < allSessions.length ; i++) { %>
+            <tr>
+              <td>
+                <a
+                  href="/sessions/<%=allSessions[i].id %>"
+                  class="text-green-600"
+                >
+                  <div
+                    class="my-0.5 bg-white text-cyan-700 font-semibold hover:bg-stone-50 border border-gray-600 rounded p-2 w-full"
+                  >
+                    <div class="mr-18 display: inline">
+                      <%= new
+                      Date(allSessions[i].playDate).toLocaleString('en-US', {
+                      weekday: 'short', month: 'short', day: '2-digit', year:
+                      'numeric', hour: '2-digit', minute: '2-digit', second:
+                      '2-digit', hour12: true }) %>
+                    </div>
+                    <% if (allSessions[i].playersneeded>1) { %>
+                    <div class="pl-5 pr-2 display: inline">
+                      <%=allSessions[i].playersneeded %> slots
+                    </div>
+                    <% } %> <% if (allSessions[i].playersneeded===1) { %>
+                    <div class="text-red-600 pl-5 pr-2 display: inline">
+                      Last slot
+                    </div>
+                    <% } %> <% if (allSessions[i].playersneeded ===0) { %>
+                    <div
+                      class="text-green-1000 font-bold pl-5 pr-2 display: inline"
+                    >
+                      Fully Booked
+                    </div>
+                    <% } %>
+                  </div>
+                </a>
+              </td>
+            </tr>
+            <% } %>
+          </table>
+        </div>
+        <hr class="my-5 h-0.5 bg-black opacity-50" />
+        <div>
+          <h1 class="mb-3 text-2xl font-bold">
+            Canceled Sessions (<%=allCanceledSessions.length %>)
+          </h1>
+          <h1 class="text-xl mb-2 font-semibold text-gray-600">
+            Canceled Sessions of <%- sportTitle %>
+          </h1>
+          <table>
+            <% for( var i = 0 ; i < allCanceledSessions.length ; i++) { %>
+            <tr>
+              <td>
+                <a
+                  href="/sessions/<%=allCanceledSessions[i].id %>"
+                  class="text-green-600"
+                >
+                  <div
+                    class="border my-0.5 bg-white text-cyan-700 font-semibold hover:bg-stone-50 border-gray-600 rounded p-2 w-full"
+                  >
+                    <div class="mr-18 display: inline">
+                      <%= new
+                      Date(allCanceledSessions[i].playDate).toLocaleString('en-US',
+                      { weekday: 'short', month: 'short', day: '2-digit', year:
+                      'numeric', hour: '2-digit', minute: '2-digit', second:
+                      '2-digit', hour12: true }) %>
+                    </div>
+                    <% if (allCanceledSessions[i].playersneeded>1) { %>
+                    <div class="pl-5 pr-2 display: inline">
+                      <%=allCanceledSessions[i].playersneeded %> slots
+                    </div>
+                    <% } %> <% if (allCanceledSessions[i].playersneeded===1) {
+                    %>
+                    <div class="text-red-600 pl-5 pr-2 display: inline">
+                      Last slot
+                    </div>
+                    <% } %> <% if (allCanceledSessions[i].playersneeded ===0) {
+                    %>
+                    <div
+                      class="text-green-1000 font-bold pl-5 pr-2 display: inline"
+                    >
+                      Fully Booked
+                    </div>
+                    <% } %> <% if (allCanceledSessions[i].isCanceled ===true ) {
+                    %>
+                    <div
+                      class="text-red-600 font-bold pl-5 pr-2 display: inline"
+                    >
+                      Canceled
+                    </div>
+                    <% } %>
+                  </div>
+                </a>
+              </td>
+            </tr>
+            <% } %>
+          </table>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

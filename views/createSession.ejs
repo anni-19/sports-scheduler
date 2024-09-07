@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="./css/style.css" />
+    <title>Create Session</title>
+  </head>
+  <body>
+    <%- include('navbar') %>
+    <div class="grid grid-cols-6">
+      <div class="my-5 col-start-3 col-span-2">
+        <span class="text-3xl my-5 font-semibold text-gray-600">Create new session</span>
+        
+        <br><br>
+        <form action="/sessions" method="post">
+          <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+          <input type="hidden" name="sportId" value="<%= sportId %>" />
+          <input type="hidden" name="creatorId" value="<%= userId %>" />
+          <div class="py-3">
+            <label for="playDate" class="text-xl my-3 font-semibold text-gray-600"
+              >When will this session be held?</label
+            >
+            <input
+              name="playDate"
+              class="ml-5 border border-gray-600 text-gray-900 rounded p-2"
+              type="datetime-local"
+              min="<%= new Date().toISOString().slice(0, 16) %>"
+            />
+          </div>
+          <div class="py-3">
+            <label for="venue" class="text-xl font-semibold text-gray-600"
+              >Where will this session be played?</label
+            >
+            <input
+              name="venue"
+              class="border border-gray-600 text-gray-900 rounded p-2 w-full"
+              type="text"
+            />
+          </div>
+          <div class="py-3">
+            <label for="playernames" class="text-xl font-semibold text-gray-600"
+              >who all will be joining in this session? (comma-seperated)</label
+            >
+            <input
+              type="text"
+              name="playernames"
+              id="playernames"
+              class="border border-gray-600 text-gray-900 rounded p-2 w-full"
+            />
+          </div>
+          <div class="py-3">
+            <label for="title" class="text-xl font-semibold text-gray-600"
+              >How many more players nedded?</label
+            >
+            <input
+              name="playersneeded"
+              class="border border-gray-600 text-gray-900 rounded p-2 w-full"
+              type="integer"
+            />
+          </div>
+          <div class="py-3">
+            <button
+              type="submit"
+              class="text-white bg-cyan-600 hover:bg-cyan-800 font-medium rounded px-5 py-2"
+            >
+              Create
+            </button>
+          </div>
+        </form>
+        <div class="text-grey-600 ml-3"><% if(messages && messages.error && messages.error.length > 0)  { %>
+          <% for(var i=0; i<messages.error.length; i++) { %>
+                  <li > <%= messages.error[i] %></li>
+          <% } %>
+        <% } %></div>
+        <% if (allowToJoin===false ) { %>
+        <h3 class="text-xl">
+          You Can't create this session as you have the following Session at the
+          same time
+        </h3>
+        <div>
+          <table>
+            <br />
+            <tr>
+              <td>
+                <div
+                  class="border border-gray-600 text-gray-900 rounded p-2 w-full"
+                >
+                  <a
+                    href="/sessions/<%=userJoinedSession.id %>"
+                    class="text-green-600"
+                  >
+                    <div class="mr-18 display: inline">
+                      <%=userJoinedSession.playDate.toString().substring(0,25)%>
+                    </div>
+                    <% if (userJoinedSession.playersneeded>1) { %>
+                    <div class="pl-5 pr-2 display: inline">
+                      <%=userJoinedSession.playersneeded %> slots
+                    </div>
+                    <% } %> <% if (userJoinedSession.playersneeded===1) { %>
+                    <div class="text-red-600 pl-5 pr-2 display: inline">
+                      Last slot
+                    </div>
+                    <% } %> <% if (userJoinedSession.playersneeded===0) { %>
+                    <div
+                      class="text-green-1000 font-bold pl-5 pr-2 display: inline"
+                    >
+                      Fully Booked
+                    </div>
+                    <% } %>
+                  </a>
+                </div>
+              </td>
+            </tr>
+            <% } %>
+          </table>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

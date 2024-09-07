@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="./css/style.css" />
+    <title>Reports</title>
+  </head>
+  <body>
+    <%- include('navbar') %>
+    <div class="grid grid-cols-10">
+      <div class="mt-6 col-start-4 col-span-4">
+        <div>
+          <span class="text-3xl mr-5 font-semibold text-gray-600"
+            >Let's see insights of all sports</span
+          >
+          
+        </div>
+
+        <div class="mt-5">
+          <form action="/reports" method="post">
+            <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+            <div class="py-3">
+              <label for="startDate" class="text-xl font-semibold text-gray-600"
+                >From</label
+              >
+              <input
+                name="startDate"
+                id="startDate"
+                class="ml-6 border border-gray-600 text-gray-900 rounded p-2"
+                type="datetime-local"
+              />
+            </div>
+            <div class="py-3">
+              <label for="endtDate" class="text-xl font-semibold text-gray-600"
+                >To</label
+              >
+              <input
+                name="endDate"
+                id="endDate"
+                class="ml-12 border border-gray-600 text-gray-900 rounded p-2"
+                type="datetime-local"
+              />
+            </div>
+            <div class="py-3">
+              <button
+                type="submit"
+                class="text-white bg-green-600 hover:bg-green-800 font-medium rounded px-5 py-2"
+              >
+                Filter
+              </button>
+            </div>
+          </form>
+          <div class="text-grey-600"><% if(messages && messages.error && messages.error.length > 0)  { %>
+            <% for(var i=0; i<messages.error.length; i++) { %>
+                    <li > <%= messages.error[i] %></li>
+            <% } %>
+          <% } %></div>
+          <script>
+            const startDateInput = document.getElementById("startDate");
+            const endDateInput = document.getElementById("endDate");
+            startDateInput.addEventListener("input", function () {
+              endDateInput.min = startDateInput.value;
+            });
+          </script>
+        </div>
+        <hr class="my-5 h-0.5 bg-black opacity-50" />
+        <div>
+          <h5 class="text-xl font-bold text-gray-600 pb-5">
+            Rank of Sports according to number of Sessions
+          </h5>
+          <div class="p-4">
+            <table class="border-collapse border border-slate-400" >
+              <tbody>
+                <tr>
+                  <th class="p-3 text-center font-bold border border-slate-300 rounded-md">Rank</th>
+                  <th class="p-3 text-center font-bold border border-slate-300 rounded-md">Sport</th>
+                  <th class="p-3 text-center font-bold border border-slate-300 rounded-md">No of Sessions</th>
+                </tr>
+                <% for(var i = 0; i < sortedSportTitles.length; i++) { %>
+                <tr>
+                  <td class="p-3 text-center font-bold border border-slate-300 rounded-md"><%= i+1 %></td>
+                  <td class="p-3 text-center font-bold border border-slate-300 rounded-md"><a
+                    href="/sport/<%= sortedSportIds[i]
+                    %>/report-session/<%= startDate %>/<%= endDate %>"
+                    class="bg-white hover:bg-stone-50 font-semibold rounded my-0.5 p-2 w-auto text-green-600 w-full"
+                    >
+                    <%= sortedSportTitles[i] %>
+                   </a></td>
+                  <td class="text-center p-3 border border-slate-300 rounded-md">  <%= sortedSessionCount[i] %></td>
+                </tr>
+                <% } %>
+              </tbody>
+            </table>
+          </div>
+          <hr class="my-5 h-0.5 bg-black opacity-50" />
+          <div>
+            <h5 class="text-2xl font-bold text-gray-600 pb-5">
+              Relative popularity of Sports
+            </h5>
+          </div>
+        </div>
+        <div style="width: 600px; height: 300px;">
+          <canvas id="myChart"></canvas>
+        </div>
+        <hr class="my-5 h-0.5 bg-black opacity-50" />
+        
+        <div class="my-5"></div>
+        
+      </div>
+    </div>
+    <script>
+      const sportTitlesx = <%- JSON.stringify(sortedSportTitles) %>;
+      const sessionCountsy = <%- JSON.stringify(sortedSessionCount) %>;
+
+      new Chart("myChart", {
+        type: "bar",
+        data: {
+          labels: sportTitlesx,
+          datasets: [
+            {
+              label: "No of Sessions created",
+              data: sessionCountsy,
+            },
+          ],
+        },
+        options: {},
+      });
+    </script>
+  </body>
+</html>

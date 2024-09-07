@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="./css/style.css" />
+    <title>Previous Sessions</title>
+    <script>
+      function deleteSport(id) {
+        fetch(`/sport/${id}`, {
+          method: "delete",
+        })
+          .then((res) => {
+            if (res.ok) {
+              window.location.href = "/";
+            }
+          })
+          .catch((err) => console.error(err));
+      }
+    </script>
+  </head>
+  <body>
+    <%- include('navbar') %>
+    <div class="grid grid-cols-6 pt-10">
+      <div class="col-start-3 col-span-2">
+        <span class="text-4xl font-semibold text-gray-600"><%= title %></span>
+        <br />
+        <div>
+          <h1 class="my-3 text-2xl font-bold text-gray-600">
+            Previous sessions (<%=previousSessions.length %>)
+          </h1>
+          <table>
+            <h5 class="my-3">
+              <%=previousSessions.length %> sessions Available
+            </h5>
+            <% for( var i = 0 ; i < previousSessions.length ; i++) { %>
+            <tr>
+              <td>
+                <a
+                  href="/sessions/<%=previousSessions[i].id %>"
+                  class="text-green-600"
+                >
+                  <div
+                    class="my-1.5 bg-white hover:bg-stone-50 border border-gray-600 text-cyan-700 font-semibold rounded p-2 my-0.5 w-full"
+                  >
+                    <div class="mr-18 display: inline">
+                      <%= new
+                      Date(previousSessions[i].playDate).toLocaleString('en-US',
+                      { weekday: 'short', month: 'short', day: '2-digit', year:
+                      'numeric', hour: '2-digit', minute: '2-digit', second:
+                      '2-digit', hour12: true }) %>
+                    </div>
+                    <% if (previousSessions[i].playersneeded>1) { %>
+                    <div class="pl-5 pr-2 display: inline">
+                      <%=previousSessions[i].playersneeded %> slots
+                    </div>
+                    <% } %> <% if (previousSessions[i].playersneeded===1) { %>
+                    <div class="text-red-600 pl-5 pr-2 display: inline">
+                      Last slot
+                    </div>
+                    <% } %> <% if (previousSessions[i].playersneeded ===0) { %>
+                    <div
+                      class="text-green-1000 font-bold pl-5 pr-2 display: inline"
+                    >
+                      Fully Booked
+                    </div>
+                    <% } %> <% if (previousSessions[i].isCanceled ===true ) { %>
+                    <div
+                      class="text-red-600 font-bold pl-5 pr-2 display: inline"
+                    >
+                      Canceled
+                    </div>
+                    <% } %>
+                  </div>
+                </a>
+              </td>
+            </tr>
+            <% } %>
+          </table>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="./css/style.css" />
+    <title>My Sessions</title>
+    <script>
+      function deleteSport(id) {
+        fetch(`/sport/${id}`, {
+          method: "delete",
+        })
+          .then((res) => {
+            if (res.ok) {
+              window.location.href = "/";
+            }
+          })
+          .catch((err) => console.error(err));
+      }
+    </script>
+  </head>
+  <body>
+    <%- include('navbar') %>
+    <div class="grid grid-cols-6 pt-10">
+      <div class="col-start-3 col-span-2">
+        <div>
+          <h1 class="mb-3 text-center text-2xl font-bold text-gray-600">
+            Active Upcoming sessions
+          </h1>
+
+          <div class="flex">
+            <div class="flex m-auto">
+              <div class="m-auto">
+                <%- include('sessionList', {sessions: upComingSessions}) %>
+              </div>
+            </div>
+          </div>
+        </div>
+        <hr class="my-5 h-0.5 bg-black opacity-50" />
+        <div>
+          <h1 class="mb-3 text-2xl text-center font-bold text-gray-600">
+            Previous sessions
+          </h1>
+          <div class="flex">
+            <div class="flex m-auto">
+              <div class="m-auto">
+                <%- include('sessionList', {sessions: previousSessions}) %>
+              </div>
+            </div>
+          </div>
+        </div>
+        <hr class="my-5 h-0.5 bg-black opacity-50" />
+        <div>
+          <h5 class="text-2xl text-center font-bold text-gray-600 pb-5">
+            Sessions created by you
+          </h5>
+          <div class="flex">
+            <div class="flex m-auto">
+              <div class="m-auto">
+                <%- include('sessionList', {sessions: createdSessions}) %>
+              </div>
+            </div>
+          </div>
+        </div>
+        <hr class="my-5 h-0.5 bg-black opacity-50" />
+        <div class="mb-5">
+          <h1 class="my-3 text-2xl text-center font-bold text-gray-600">
+            Canceled sessions
+          </h1>
+
+          <div class="flex">
+            <div class="flex m-auto">
+              <div class="m-auto">
+                <%- include('sessionList', {sessions: canceledSessions}) %>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
